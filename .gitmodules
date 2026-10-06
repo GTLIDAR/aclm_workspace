@@ -1,0 +1,9 @@
+[submodule "src/ocs2"]
+	path = src/ocs2
+	url = https://github.com/GTLIDAR/ocs2.git
+[submodule "src/ocs2_robotic_assets"]
+	path = src/ocs2_robotic_assets
+	url = https://github.com/GTLIDAR/ocs2_robotic_assets.git
+[submodule "src/mapping_third_party"]
+	path = src/mapping_third_party
+	url = https://github.com/GTLIDAR/mapping_third_party.git

@@ -1,0 +1,43 @@
+#pragma once
+
+#include <ocs2_core/constraint/StateInputConstraint.h>
+
+#include "ocs2_multi_robot/reference_manager/SwitchedModelReferenceManagerWithTerrain.h"
+#include "ocs2_multi_robot/common/Types.h"
+#include "ocs2_multi_robot/AlternatingPreComputation.h"
+
+namespace ocs2 {
+namespace multi_robot {
+
+/**
+ * Enforce a kinematics box for each EE
+*/
+class SingleRobotArmKinematicsBoxConstraint final : public StateInputConstraint {
+public:
+  /*
+   * Constructor
+   * @param [in] referenceManager : Switched model ReferenceManager.
+   * @param [in] index : The index of the robot.
+   */
+  SingleRobotArmKinematicsBoxConstraint(const SwitchedModelReferenceManagerWithTerrain& referenceManager,
+                                        size_t index);
+
+  ~SingleRobotArmKinematicsBoxConstraint() override = default;
+  SingleRobotArmKinematicsBoxConstraint* clone() const override { return new SingleRobotArmKinematicsBoxConstraint(*this); }
+
+  bool isActive(scalar_t time) const override;
+  size_t getNumConstraints(scalar_t time) const override { return 6; }
+  vector_t getValue(scalar_t time, const vector_t& state, const vector_t& input, const PreComputation& preComp) const override;
+  VectorFunctionLinearApproximation getLinearApproximation(scalar_t time, const vector_t& state, const vector_t& input,
+                                                           const PreComputation& preComp) const override;
+
+private:
+  SingleRobotArmKinematicsBoxConstraint(const SingleRobotArmKinematicsBoxConstraint& other) = default;
+
+  const SwitchedModelReferenceManagerWithTerrain* referenceManagerPtr_;
+  const size_t index_;
+
+};
+
+}  // namespace multi_robot
+}  // namespace ocs2

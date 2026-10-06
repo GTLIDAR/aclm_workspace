@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot name="cargo">
+  <link name="cargo">
+    <visual>
+      <geometry>
+        <mesh filename="package://ocs2_multi_robot/assets/robot/b1z1_description/meshes/box.stl"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+</robot>

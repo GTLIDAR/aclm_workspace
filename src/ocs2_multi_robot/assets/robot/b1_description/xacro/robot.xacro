@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!-- b1_description: Unitree B1 quadruped robot -->
+<robot name="b1_description" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- define arguments -->
+    <xacro:arg name="DEBUG" default="false"/> <!-- debug mode switch -->
+
+    <!-- include xacro files -->
+    <xacro:include filename="$(find ocs2_multi_robot)/assets/robot/b1_description/xacro/b1.xacro"/>
+    <xacro:include filename="$(find ocs2_multi_robot)/assets/robot/b1_description/xacro/gazebo.xacro"/>
+
+    <!-- B1 macro: expands to describe B1 quadruped robot -->
+    <xacro:b1/>
+
+    <!-- debug mode configuration -->
+    <xacro:if value="$(arg DEBUG)">
+        <!-- statically affix B1 base to world; i.e. "hang up" the robot -->
+        <link name="world"/>
+        <joint name="base_static_joint" type="fixed">
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <parent link="world"/>
+            <child link="base"/>
+        </joint>
+    </xacro:if>
+
+</robot>

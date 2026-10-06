@@ -1,0 +1,10 @@
+/build/
+/devel/
+/install/
+/logs/
+/.catkin_tools/
+/.vscode/
+
+__pycache__/
+*.pyc
+.env

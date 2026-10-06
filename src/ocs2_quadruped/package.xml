@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>ocs2_quadruped</name>
+    <version>0.0.0</version>
+    <description>Quadruped optimal control, ROS messages, visualization and MPC nodes based on OCS2.</description>
+    <maintainer email="lidar@gatech.edu">LIDAR Lab</maintainer>
+
+    <license>MIT</license>
+    <license>BSD</license>
+    <license>BSD-3</license>
+    <author email="lidar@gatech.edu">LIDAR Lab</author>
+
+    <!-- buildtool_depend: dependencies of the build process -->
+    <buildtool_depend>catkin</buildtool_depend>
+    <!-- build_depend: dependencies only used in source files -->
+    <!-- depend: build, export, and execution dependency -->
+    <depend>ocs2_core</depend>
+    <depend>ocs2_oc</depend>
+    <depend>ocs2_ddp</depend>
+    <depend>ocs2_mpc</depend>
+    <depend>ocs2_sqp</depend>
+    <depend>ocs2_robotic_tools</depend>
+    <depend>ocs2_pinocchio_interface</depend>
+    <depend>ocs2_centroidal_model</depend>
+    <depend>pinocchio</depend>
+    <depend>roscpp</depend>
+    <depend>roslib</depend>
+    <depend>tf</depend>
+    <depend>urdf</depend>
+    <depend>kdl_parser</depend>
+    <depend>robot_state_publisher</depend>
+    <depend>cmake_modules</depend>
+    <depend>ocs2_msgs</depend>
+    <depend>ocs2_ros_interfaces</depend>
+    <depend>message_generation</depend>
+    <depend>std_msgs</depend>
+    <exec_depend>message_runtime</exec_depend>
+
+</package>

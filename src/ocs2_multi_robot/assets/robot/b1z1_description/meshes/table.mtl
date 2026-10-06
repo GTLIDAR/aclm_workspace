@@ -1,0 +1,13 @@
+# Blender 4.3.2 MTL File: 'table.blend'
+# www.blender.org
+
+newmtl wire_177027088.001
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Oak-Wood-T02-D.jpg
+map_Ks Oak-Wood-T02-Ref-Spec.jpg
+map_Ns Oak-Wood-T02-Roug-Gloss.jpg
+map_Bump -bm 0.600000 Oak-Wood-T02-NM.jpg

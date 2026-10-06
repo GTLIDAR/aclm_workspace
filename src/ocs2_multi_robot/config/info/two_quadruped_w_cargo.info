@@ -1,0 +1,785 @@
+; Multiple_Shooting SQP settings
+sqp
+{
+  dt                            0.01
+  sqpIteration                  1
+  deltaTol                      1e-4
+  printSolverStatistics         false
+  printSolverStatus             false
+  printLinesearch               false
+  useFeedbackPolicy             false
+  integratorType                RK2
+  nThreads                      4
+  alpha_min                     1e-5
+}
+
+; DDP settings
+ddp
+{
+  algorithm                     SLQ
+
+  nThreads                      4
+
+  maxNumIterations              1
+  minRelCost                    0.1
+  constraintTolerance           1e-3
+
+  displayInfo                   false
+  displayShortSummary           false
+  checkNumericalStability       false
+
+  AbsTolODE                     1e-5
+  RelTolODE                     1e-3
+  timeStep                      1e-3
+  maxNumStepsPerSecond          100000
+  backwardPassIntegratorType    ODE45
+
+  inequalityConstraintMu        100.0
+  inequalityConstraintDelta     1.1
+
+  preComputeRiccatiTerms        true
+
+  useFeedbackPolicy             false
+
+  strategy                      LINE_SEARCH
+  lineSearch
+  {
+    minStepLength                 0.1
+    maxStepLength                 1.0
+    hessianCorrectionStrategy     DIAGONAL_SHIFT
+    hessianCorrectionMultiple     1e-3
+  }
+}
+
+; Rollout settings
+rollout
+{
+  AbsTolODE                     1e-5
+  RelTolODE                     1e-3
+  timeStep                      1e-2
+  maxNumStepsPerSecond          100000
+  checkNumericalStability       false
+}
+
+; centroidal interface settings
+centroidal_interface
+{
+  recompileLibraries       1    ; put this flag to 1 to force recompilation of dynamics library
+}
+
+; MPC settings
+mpc
+{
+  timeHorizon                    1.0   ; [s]
+  solutionTimeWindow             0.2   ; [s]
+  coldStart                      false
+
+  debugPrint                     true
+
+  mpcDesiredFrequency            100   ; [Hz]
+  mrtDesiredFrequency            400   ; [Hz]
+}
+
+; robot model setup
+robot_model
+{
+  mass    60.91                       ; 55.689 Mass of B1; 60.91 Mass of B1Z1
+  inertia                              ; From getCentroidalModelInfo()
+  {
+    (0,0) 1.813    ; 1.520
+    (0,1) -0.002   ; -0.003
+    (0,2) -0.545   ; -0.202
+    (1,0) -0.002   ; -0.003
+    (1,1) 5.885    ; 5.083
+    (1,2) -0.001   ; -0.002
+    (2,0) -0.545   ; -0.202
+    (2,1) -0.001   ; -0.002
+    (2,2) 5.702    ; 5.188
+  }
+  base2hip
+  {
+    (0,0) 0.3455  ; FL_x
+    (1,0) 0.072   ; FL_y
+    (2,0) 0.0     ; FL_z
+    (3,0) 0.3455  ; FR_x
+    (4,0) -0.072   ; FR_y
+    (5,0) 0.0     ; FR_z
+    (6,0) -0.3455  ; RL_x
+    (7,0) 0.072   ; RL_y
+    (8,0) 0.0     ; RL_z
+    (9,0) -0.3455  ; RR_x
+    (10,0) -0.072  ; RR_y
+    (11,0) 0.0    ; RR_z
+  }
+  hfe_to_haa_y
+  {
+    (0,0) 0.0  ; x
+    (1,0) 0.12675  ; y
+    (2,0) 0.0  ; z
+  }
+  thigh_length    0.35
+  shank_length    0.35
+  z1_base_offset
+  {
+    (0,0) 0.3455; x 
+    (1,0) 0.0; y
+    (2,0) 0.085; z
+    (3,0) 0.0; yaw
+    (4,0) 0.0; pitch
+    (5,0) 0.0; roll
+  }
+}
+
+; cargo model setup
+cargo_model
+{
+  mass    3.0
+  inertia
+  {
+    (0,0) 0.50000e+00                    ;
+    (0,1) 0.00000e+00                    ;
+    (0,2) 0.00000e+00                    ;
+    (1,0) 0.00000e+00                    ;
+    (1,1) 0.50000e+00                    ;
+    (1,2) 0.00000e+00                    ;
+    (2,0) 0.00000e+00                    ;
+    (2,1) 0.00000e+00                    ;
+    (2,2) 0.50000e+00                    ;
+  }
+  handle_1
+  {
+    (0,0) -0.6; x
+    (1,0) 0.0; y
+    (2,0) 0.35; z
+    (3,0) 0.0; yaw
+    (4,0) 0.0; pitch
+    (5,0) 0.0; roll
+  }
+  handle_2
+  {
+    (0,0) 0.6;
+    (1,0) 0.0;
+    (2,0) 0.35;
+    (3,0) 3.141592; yaw
+    (4,0) 0.0; pitch
+    (5,0) 0.0; roll
+  }
+}
+
+com_height
+{
+  height 0.487695;
+}
+
+cargo_height_offset
+{
+  height 0.8;  ; cargo COM height above terrain
+}
+
+; initial robot state
+initialRobotState
+{
+  (0,0) 0.0  ; com_x
+  (1,0) 0.0  ; com_y
+  (2,0) 0.487695  ; com_z
+  (3,0) 0.0  ; com_dx
+  (4,0) 0.0  ; com_dy
+  (5,0) 0.0  ; com_dz
+
+  (6,0) 0.0  ; yaw
+  (7,0) 0.0  ; pitch
+  (8,0) 0.0  ; roll
+  (9,0) 0.0  ; AM_x
+  (10,0) 0.0  ; AM_y
+  (11,0) 0.0  ; AM_z
+
+  (12,0) 0.3455    ; FL_x
+  (13,0) 0.19875   ; FL_y
+  (14,0) 0.0       ; FL_z
+  (15,0) 0.3455    ; FR_x
+  (16,0) -0.19875  ; FR_y
+  (17,0) 0.0       ; FR_z
+  (18,0) -0.3455   ; RL_x
+  (19,0) 0.19875   ; RL_y
+  (20,0) 0.0       ; RL_z
+  (21,0) -0.3455   ; RR_x
+  (22,0) -0.19875  ; RR_y
+  (23,0) 0.0       ; RR_z
+}
+
+; initial cargo state
+initialCargoState
+{
+  ; cargo
+  (0,0) 0.0  ; com_x
+  (1,0) 0.0  ; com_y
+  (2,0) 0.8  ; com_z
+  (3,0) 0.0  ; com_dx
+  (4,0) 0.0  ; com_dy
+  (5,0) 0.0  ; com_dz
+
+  (6,0) 0.0  ; yaw
+  (7,0) 0.0  ; pitch
+  (8,0) 0.0  ; roll
+  (9,0) 0.0  ; AM_x
+  (10,0) 0.0  ; AM_y
+  (11,0) 0.0  ; AM_z
+}
+
+; initial state offset (wrt cargo frame)
+initialStateOffset
+{
+  robot_1
+  {
+    (0,0) -1.5 ; com x
+    (1,0) 0.0 ; com y
+    (2,0) -0.31 ; com z
+    (3,0) 0.0; yaw
+    (4,0) 0.0 ; pitch
+    (5,0) 0.0 ; roll
+  }
+  robot_2
+  {
+    (0,0) 1.5 ; com x
+    (1,0) 0.0 ; com y
+    (2,0) -0.31 ; com z
+    (3,0) 3.141592 ; yaw
+    (4,0) 0.0 ; pitch
+    (5,0) 0.0 ; roll
+  }
+}
+
+centroidal_weights
+{
+  centroidal_type      "srbm"
+  ; state weight matrix
+  Q
+  {
+    scaling 1e+0
+
+    (0,0) 500.0  ; com_x
+    (1,1) 500.0  ; com_y
+    (2,2) 800.0  ; com_z
+    (3,3) 30.0  ; com_dx
+    (4,4) 30.0  ; com_dy
+    (5,5) 50.0  ; com_dz
+
+    (6,6) 300.0  ; yaw
+    (7,7) 300.0  ; pitch
+    (8,8) 300.0  ; roll
+    (9,9) 0.0  ; AM_x
+    (10,10) 0.0  ; AM_y
+    (11,11) 0.0  ; AM_z
+
+    (12,12) 0.0  ; FL_x
+    (13,13) 0.0  ; FL_y
+    (14,14) 0.0  ; FL_z
+    (15,15) 0.0  ; FR_x
+    (16,16) 0.0  ; FR_y
+    (17,17) 0.0  ; FR_z
+    (18,18) 0.0  ; RL_x
+    (19,19) 0.0  ; RL_y
+    (20,20) 0.0  ; RL_z
+    (21,21) 0.0  ; RR_x
+    (22,22) 0.0  ; RR_y
+    (23,23) 0.0  ; RR_z
+
+    ; second robot
+
+    (24,24) 500.0  ; com_x
+    (25,25) 500.0  ; com_y
+    (26,26) 800.0  ; com_z
+    (27,27) 30.0  ; com_dx
+    (28,28) 30.0  ; com_dy
+    (29,29) 50.0  ; com_dz
+
+    (30,30) 300.0  ; yaw
+    (31,31) 300.0  ; pitch
+    (32,32) 300.0  ; roll
+    (33,33) 0.0  ; AM_x
+    (34,34) 0.0  ; AM_y
+    (35,35) 0.0  ; AM_z
+
+    (36,36) 0.0  ; FL_x
+    (37,37) 0.0  ; FL_y
+    (38,38) 0.0  ; FL_z
+    (39,39) 0.0  ; FR_x
+    (40,40) 0.0  ; FR_y
+    (41,41) 0.0  ; FR_z
+    (42,42) 0.0  ; RL_x
+    (43,43) 0.0  ; RL_y
+    (44,44) 0.0  ; RL_z
+    (45,45) 0.0  ; RR_x
+    (46,46) 0.0  ; RR_y
+    (47,47) 0.0  ; RR_z
+
+    ; cargo
+
+    (48,48) 500.0  ; com_x
+    (49,49) 500.0  ; com_y
+    (50,50) 800.0  ; com_z
+    (51,51) 30.0  ; com_dx
+    (52,52) 30.0  ; com_dy
+    (53,53) 50.0  ; com_dz
+
+    (54,54) 300.0  ; yaw
+    (55,55) 300.0  ; pitch
+    (56,56) 300.0  ; roll
+    (57,57) 0.0  ; AM_x
+    (58,58) 0.0  ; AM_y
+    (59,59) 0.0  ; AM_z
+  }
+
+  ; control weight matrix
+  R
+  {
+    scaling 1e-3
+
+    ;; Feet Contact Forces: [LF, RF, LH, RH] ;;
+    (0,0)   10.0       ; left_front_force
+    (1,1)   10.0       ; left_front_force
+    (2,2)   10.0       ; left_front_force
+    (3,3)   10.0       ; right_front_force
+    (4,4)   10.0       ; right_front_force
+    (5,5)   10.0       ; right_front_force
+    (6,6)   10.0       ; left_hind_force
+    (7,7)   10.0       ; left_hind_force
+    (8,8)   10.0       ; left_hind_force
+    (9,9)   10.0       ; right_hind_force
+    (10,10) 10.0       ; right_hind_force
+    (11,11) 10.0       ; right_hind_force
+
+    ;; foot velocity relative to base: [LF, LH, RF, RH] ;;
+    (12,12) 1000.0    ; x
+    (13,13) 1000.0    ; y
+    (14,14) 1000.0    ; z
+    (15,15) 1000.0    ; x
+    (16,16) 1000.0    ; y
+    (17,17) 1000.0    ; z
+    (18,18) 1000.0    ; x
+    (19,19) 1000.0    ; y
+    (20,20) 1000.0    ; z
+    (21,21) 1000.0    ; x
+    (22,22) 1000.0    ; y
+    (23,23) 1000.0    ; z
+
+    ;;; second robot
+
+    ;; Feet Contact Forces: [LF, RF, LH, RH] ;;
+    (24,24)   10.0       ; left_front_force
+    (25,25)   10.0       ; left_front_force
+    (26,26)   10.0       ; left_front_force
+    (27,27)   10.0       ; right_front_force
+    (28,28)   10.0       ; right_front_force
+    (29,29)   10.0       ; right_front_force
+    (30,30)   10.0       ; left_hind_force
+    (31,31)   10.0       ; left_hind_force
+    (32,32)   10.0       ; left_hind_force
+    (33,33)   10.0       ; right_hind_force
+    (34,34)   10.0       ; right_hind_force
+    (35,35)   10.0       ; right_hind_force
+
+    ;; foot velocity relative to base: [LF, LH, RF, RH] ;;
+    (36,36) 1000.0    ; x
+    (37,37) 1000.0    ; y
+    (38,38) 1000.0    ; z
+    (39,39) 1000.0    ; x
+    (40,40) 1000.0    ; y
+    (41,41) 1000.0    ; z
+    (42,42) 1000.0    ; x
+    (43,43) 1000.0    ; y
+    (44,44) 1000.0    ; z
+    (45,45) 1000.0    ; x
+    (46,46) 1000.0    ; y
+    (47,47) 1000.0    ; z
+
+    ; cargo
+
+    (48,48) 100.0  ; fr1x
+    (49,49) 100.0  ; fr1y
+    (50,50) 100.0  ; fr1z
+    (51,51) 100.0  ; tr1x
+    (52,52) 100.0  ; tr1y
+    (53,53) 100.0  ; tr1z
+
+    (54,54) 100.0  ; fr2x
+    (55,55) 100.0  ; fr2y
+    (56,56) 100.0  ; fr2z
+    (57,57) 100.0  ; tr2x
+    (58,58) 100.0  ; tr2y
+    (59,59) 100.0  ; tr2z
+  }
+
+  ; final state weight matrix
+  Q_final
+  {
+    scaling 1e+0
+
+    (0,0) 500.0  ; com_x
+    (1,1) 500.0  ; com_y
+    (2,2) 800.0  ; com_z
+    (3,3) 30.0  ; com_dx
+    (4,4) 30.0  ; com_dy
+    (5,5) 50.0  ; com_dz
+
+    (6,6) 300.0  ; yaw
+    (7,7) 300.0  ; pitch
+    (8,8) 300.0  ; roll
+    (9,9) 0.0  ; AM_x
+    (10,10) 0.0  ; AM_y
+    (11,11) 0.0  ; AM_z
+
+    (12,12) 0.0  ; FL_x
+    (13,13) 0.0  ; FL_y
+    (14,14) 0.0  ; FL_z
+    (15,15) 0.0  ; FR_x
+    (16,16) 0.0  ; FR_y
+    (17,17) 0.0  ; FR_z
+    (18,18) 0.0  ; RL_x
+    (19,19) 0.0  ; RL_y
+    (20,20) 0.0  ; RL_z
+    (21,21) 0.0  ; RR_x
+    (22,22) 0.0  ; RR_y
+    (23,23) 0.0  ; RR_z
+
+    ; second robot
+
+    (24,24) 500.0  ; com_x
+    (25,25) 500.0  ; com_y
+    (26,26) 800.0  ; com_z
+    (27,27) 30.0  ; com_dx
+    (28,28) 30.0  ; com_dy
+    (29,29) 50.0  ; com_dz
+
+    (30,30) 300.0  ; yaw
+    (31,31) 300.0  ; pitch
+    (32,32) 300.0  ; roll
+    (33,33) 0.0  ; AM_x
+    (34,34) 0.0  ; AM_y
+    (35,35) 0.0  ; AM_z
+
+    (36,36) 0.0  ; FL_x
+    (37,37) 0.0  ; FL_y
+    (38,38) 0.0  ; FL_z
+    (39,39) 0.0  ; FR_x
+    (40,40) 0.0  ; FR_y
+    (41,41) 0.0  ; FR_z
+    (42,42) 0.0  ; RL_x
+    (43,43) 0.0  ; RL_y
+    (44,44) 0.0  ; RL_z
+    (45,45) 0.0  ; RR_x
+    (46,46) 0.0  ; RR_y
+    (47,47) 0.0  ; RR_z
+
+    ; cargo
+
+    (48,48) 500.0  ; com_x
+    (49,49) 500.0  ; com_y
+    (50,50) 800.0  ; com_z
+    (51,51) 30.0  ; com_dx
+    (52,52) 30.0  ; com_dy
+    (53,53) 50.0  ; com_dz
+
+    (54,54) 300.0  ; yaw
+    (55,55) 300.0  ; pitch
+    (56,56) 300.0  ; roll
+    (57,57) 0.0  ; AM_x
+    (58,58) 0.0  ; AM_y
+    (59,59) 0.0  ; AM_z
+  }
+}
+
+frictionConeSoftConstraint
+{
+  frictionCoefficient    0.5
+  
+  ; relaxed log barrier parameters
+  mu                     0.1
+  delta                  5
+}
+
+manipulationFrictionConeSoftConstraint
+{
+  frictionCoefficient    0.5
+  
+  ; relaxed log barrier parameters
+  mu                     1e-2
+  delta                  1e-2
+}
+
+manipulationTorqueBoxConstraint {
+  lowerBound
+  {
+    (0,0)  -15.0  
+    (1,0)  -15.0
+    (2,0)  -0.01
+  }
+  upperBound
+  {
+    (0,0)  15.0  
+    (1,0)  15.0
+    (2,0)  0.01
+  }
+  ; relaxed log barrier parameters
+  mu                     1e-2
+  delta                  1e-3
+}
+
+kinematicsBoxSoftConstraint
+{
+  ; relaxed log barrier parameters
+  mu                     5.0
+  delta                  1e-3
+}
+
+footPlacementSoftConstraint
+{
+  ; relaxed log barrier parameters
+  mu                     1e-1
+  delta                  1e-2
+}
+
+perceptiveFootPlacementSoftConstraint
+{
+  ; relaxed log barrier parameters for perceptive terrain foot placement
+  mu                     1e-1
+  delta                  1e-3
+}
+
+footCollisionSoftConstraint
+{
+  ; relaxed log barrier parameters for foot collision constraint (SDF-based)
+  ; Increased clearance for stair climbing to avoid grazing step edges
+  clearance              0.04   ; minimum clearance from terrain/obstacles (m)
+  mu                     1e-1
+  delta                  1e-3
+}
+
+armKinematicsBoxSoftConstraint
+{
+  ; relaxed log barrier parameters
+  mu                     10.0
+  delta                  0.1
+}
+
+formationConstraintSoftConstraint
+{
+  ; relaxed log barrier parameters
+  mu                     10.0
+  delta                  0.1
+}
+
+formationConstraint
+{
+  ; maximum position tolerance from nominal offset [x, y] in cargo frame (no z constraint)
+  position_tolerance
+  {
+    (0,0) 0.3  ; x tolerance (m)
+    (1,0) 0.3  ; y tolerance (m)
+  }
+}
+
+orientationConstraintSoftConstraint
+{
+  ; relaxed log barrier parameters for orientation constraint
+  mu                     5.0
+  delta                  0.1
+}
+
+orientationConstraint
+{
+  ; maximum pitch and roll angles (radians)
+  robot_pitch_max        0.3
+  robot_roll_max         0.3
+  cargo_pitch_max        0.2
+  cargo_roll_max         0.2
+}
+
+initialModeSchedule
+{
+  modeSequence
+  {
+    [0]  STANCE
+    [1]  STANCE
+  }
+  eventTimes
+  {
+    [0]  0.0
+  }
+}
+
+defaultModeSequenceTemplate
+{
+  modeSequence
+  {
+    [0]     STANCE
+    [1]     STANCE
+  }
+  switchingTimes
+  {
+    [0]     0.0
+    [1]     1.0
+    [2]     2.0
+  }
+  gait_name   "trotting"
+}
+
+trottingGait
+ {
+  modeSequence
+  {
+    [0]     LF_RH
+    [1]     STANCE
+    [2]     RF_LH
+    [3]     STANCE
+  }
+  switchingTimes
+  {
+    [0]     0.00
+    [1]     0.40
+    [2]     0.50
+    [3]     0.90
+    [4]     1.00
+  }
+}
+
+jumpingGait
+{
+  modeSequence
+  {
+    [0]     STANCE
+    [1]     FLY
+    [2]     STANCE
+  }
+  switchingTimes
+  {
+    [0]     0.0
+    [1]     1.0
+    [2]     1.5
+    [3]     2.0
+  }
+}
+
+swing_trajectory_config
+{
+  liftOffVelocity               0.1
+  touchDownVelocity            -0.2
+  swingHeight                   0.10
+  touchdownAfterHorizon         0.2
+  swingTimeScale                0.15
+}
+
+gait_settings
+{
+  phaseTransitionStanceTime     0.0
+}
+
+terrain_settings
+{
+  terrain_type    "Flat"
+}
+
+obstacles_box_1
+{
+  pose
+  {
+    (0,0)  2.0  ; x0
+    (0,1)  6.0   ; y0
+    (0,2)  0.75  ; z0
+  }
+
+  radius
+  {
+    [0] 1.5 ; r0
+  }
+}
+
+obstacles_box_2
+{
+  pose
+  {
+    (0,0)  -2.0  ; x0
+    (0,1)  7.0   ; y0
+    (0,2)  0.75  ; z0
+  }
+
+  radius
+  {
+    [0] 1.5 ; r0
+  }
+}
+
+obstacles_wall_1
+{
+  pose
+  {
+    (0,0)  -1.2  ; x1
+    (0,1)  2.0  ; y1
+    (0,2)  1.0  ; z1
+  }
+
+  radius
+  {
+    [0] 1.3     ; r1
+  }
+}
+
+obstacles_wall_2
+{
+  pose
+  {
+    (0,0)  2.7  ; x2
+    (0,1)  2.0  ; y2
+    (0,2)  1.0  ; z2
+  }
+
+  radius
+  {
+    [0] 1.3     ; r2
+  }
+}
+
+obstacles_wall_3
+{
+  pose
+  {
+    (0,0)  0.0  ; x3
+    (0,1)  9.0  ; y3
+    (0,2)  1.8  ; z3
+  }
+
+  radius
+  {
+    [0] 1.2     ; r3
+  }
+}
+
+2d_penalty_config
+{
+  mu                       5.0
+  delta                    0.1
+}
+
+penalty_config
+{
+  bounds
+  {
+  mu                       5.0
+  delta                    0.1
+  }
+
+  cbf
+  {
+  mu                       5.0
+  delta                    0.1
+  }
+}
+
+height_bounds
+{
+  h_max    1.0 ;
+  h_min    0.6 ;
+}
+
+targetDisplacementVelocity          0.3;
+targetRotationVelocity              0.15;

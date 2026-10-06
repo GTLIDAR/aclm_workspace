@@ -1,0 +1,10 @@
+# Service to load and activate waypoint trajectory mode
+# Request: YAML file path and trajectory name
+# Response: success flag and message
+
+string yaml_file      # YAML file path (relative to config/ or absolute)
+string trajectory_name  # Name of trajectory in YAML
+float64 velocity      # Target velocity in m/s (default 0.3 if 0)
+---
+bool success
+string message

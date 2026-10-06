@@ -1,0 +1,77 @@
+cff-version: 1.2.0
+message: >-
+  Please cite the ACLM paper when using this work. Also cite the upstream
+  libraries and methods actually used, as described in THIRD_PARTY_NOTICES.md.
+type: software
+title: ADMM-CLM Workspace
+authors:
+  - name: Georgia Tech Laboratory for Intelligent Decision and Autonomous Robots
+repository-code: https://github.com/ssyps2/aclm_workspace
+url: https://admm-clm.github.io/
+abstract: >-
+  OCS2-based centralized and ADMM model predictive control for cooperative
+  cargo transport with quadruped manipulators.
+keywords:
+  - model predictive control
+  - distributed optimization
+  - cooperative loco-manipulation
+preferred-citation:
+  type: unpublished
+  title: "ACLM: ADMM-Based Distributed Model Predictive Control for Collaborative Loco-Manipulation"
+  authors:
+    - family-names: Zhou
+      given-names: Ziyi
+      affiliation: Georgia Tech Laboratory for Intelligent Decision and Autonomous Robots
+    - family-names: Shu
+      given-names: Pengyuan
+      affiliation: Georgia Tech Laboratory for Intelligent Decision and Autonomous Robots
+    - family-names: Cao
+      given-names: Ruize
+      affiliation: Georgia Tech Laboratory for Intelligent Decision and Autonomous Robots
+    - family-names: Zhao
+      given-names: Yuntian
+      affiliation: Georgia Tech Laboratory for Intelligent Decision and Autonomous Robots
+    - family-names: Zhao
+      given-names: Ye
+      affiliation: Georgia Tech Laboratory for Intelligent Decision and Autonomous Robots
+  year: 2026
+  date-released: "2026-03-07"
+  doi: 10.48550/arXiv.2603.07095
+  url: https://arxiv.org/abs/2603.07095
+  notes: >-
+    arXiv preprint arXiv:2603.07095 [cs.RO], submitted March 7, 2026.
+    Ziyi Zhou, Pengyuan Shu, and Ruize Cao contributed equally.
+references:
+  - type: software
+    title: "OCS2: An open source library for Optimal Control of Switched Systems"
+    authors:
+      - family-names: Farshidian
+        given-names: Farbod
+      - name: OCS2 contributors
+    repository-code: https://github.com/leggedrobotics/ocs2
+    url: https://github.com/leggedrobotics/ocs2
+  - type: article
+    title: Probabilistic Terrain Mapping for Mobile Robots with Uncertain Localization
+    authors:
+      - family-names: Fankhauser
+        given-names: "P\u00e9ter"
+      - family-names: Bloesch
+        given-names: Michael
+      - family-names: Hutter
+        given-names: Marco
+    journal: IEEE Robotics and Automation Letters
+    year: 2018
+    volume: "3"
+    issue: "4"
+    start: "3019"
+    end: "3026"
+    doi: 10.1109/LRA.2018.2849506
+  - type: generic
+    title: "A Universal Grid Map Library: Implementation and Use Case for Rough Terrain Navigation"
+    authors:
+      - family-names: Fankhauser
+        given-names: "P\u00e9ter"
+      - family-names: Hutter
+        given-names: Marco
+    year: 2016
+    doi: 10.1007/978-3-319-26054-9_5

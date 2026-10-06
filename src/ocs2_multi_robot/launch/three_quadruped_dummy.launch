@@ -1,0 +1,81 @@
+<launch>
+  <!-- Input Arguments -->
+  <arg name="rviz"               default="true" />
+  <arg name="publish_robot_description"     default="true" />
+  <arg name="enable_obstacle_avoidance" default="true" />
+  <!-- The URDF model of the robot -->
+  <arg name="urdfFile"           default="$(find ocs2_multi_robot)/assets/robot/b1z1_description/urdf/b1z1.urdf"/>
+  <arg name="armUrdfFile" default="$(find ocs2_multi_robot)/assets/robot/z1_description/urdf/z1.urdf"/>
+  <arg name="cargoUrdfFile"        default="$(find ocs2_multi_robot)/assets/robot/b1z1_description/urdf/box_with_4_handles.urdf"/>
+  <arg name="gaitCommandFile"   default="$(find ocs2_multi_robot)/config/info/gait.info"/>
+  <arg name="taskFile"   default="$(find ocs2_multi_robot)/config/info/three_quadruped_w_cargo.info"/>
+  <arg name="b1z1_1_ns" value="b1z1_1"/>
+  <arg name="b1z1_2_ns" value="b1z1_2"/>
+  <arg name="b1z1_3_ns" value="b1z1_3"/>
+  <param name="robot1_ns" value="$(arg b1z1_1_ns)"/>
+  <param name="robot2_ns" value="$(arg b1z1_2_ns)"/>
+  <param name="robot3_ns" value="$(arg b1z1_3_ns)"/>
+  <param name="taskFile"   value="$(arg taskFile)"/>
+  <param name="gaitCommandFile"   value="$(arg gaitCommandFile)"/>
+  <param name="armUrdfFile"   value="$(arg armUrdfFile)"/>
+  <param name="cargoUrdfFile"   value="$(arg cargoUrdfFile)"/>
+  <param name="enable_obstacle_avoidance" value="$(arg enable_obstacle_avoidance)"/>
+
+  <!-- rviz -->
+  <group if="$(arg rviz)">
+    <arg name="rvizconfig" default="$(find ocs2_multi_robot)/rviz/view_three_b1z1.rviz" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rvizconfig)" output="screen" />
+  </group>
+
+  <!-- robot description -->
+  <!-- Robot State Publisher for Robot 1 -->
+
+  <group ns="/$(arg b1z1_1_ns)">
+    <!-- Robot State Publisher for Robot 1 -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdfFile)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+                respawn="false" output="screen">
+      <param name="tf_prefix" value="$(arg b1z1_1_ns)" />
+    </node>
+  </group>
+
+  <group ns="/$(arg b1z1_2_ns)">
+    <!-- Robot State Publisher for Robot 2 -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdfFile)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+                respawn="false" output="screen">
+      <param name="tf_prefix" value="$(arg b1z1_2_ns)" />
+    </node>
+  </group>
+
+  <group ns="/$(arg b1z1_3_ns)">
+    <!-- Robot State Publisher for Robot 3 -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdfFile)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+                respawn="false" output="screen">
+      <param name="tf_prefix" value="$(arg b1z1_3_ns)" />
+    </node>
+  </group>
+
+  <!-- Box State Publisher -->
+  <group ns="cargo">
+    <param name="robot_description" textfile="$(arg cargoUrdfFile)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+          respawn="false" output="screen" >
+      <param name="tf_prefix" value="cargo" />
+    </node>
+  </group>
+
+  <node pkg="ocs2_multi_robot" type="MultiRobotDummyMpcNode" name="MultiRobotDummyMpcNode"
+        output="screen"/>
+
+  <node pkg="ocs2_multi_robot" type="MultiRobotDummyNode" name="MultiRobotDummyNode"
+        output="screen"/>
+
+  <node pkg="ocs2_multi_robot" type="MultiRobotGeneralizedTargetTrajectoriesPublisher" name="trajectories_publisher" 
+        output="screen"/>
+
+  <node pkg="ocs2_multi_robot" type="GaitCommandNode" name="CentralGaitCommand" 
+        output="screen" launch-prefix="gnome-terminal --title='CentralGaitCommand' --"/>
+
+</launch>

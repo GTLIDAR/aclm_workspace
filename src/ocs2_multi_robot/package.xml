@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>ocs2_multi_robot</name>
+    <version>0.0.0</version>
+    <description>Multi robot optimization base on OCS2</description>
+    <maintainer email="lidar@gatech.edu">LIDAR Lab</maintainer>
+
+    <license>MIT</license>
+    <license>BSD</license>
+    <license>BSD-3-Clause</license>
+    <license>LGPL-2.1-or-later</license>
+    <license>MPL-2.0</license>
+    <author email="lidar@gatech.edu">LIDAR Lab</author>
+
+    <!-- buildtool_depend: dependencies of the build process -->
+    <buildtool_depend>catkin</buildtool_depend>
+    <!-- build_depend: dependencies only used in source files -->
+    <!-- depend: build, export, and execution dependency -->
+    <depend>ocs2_core</depend>
+    <depend>ocs2_oc</depend>
+    <depend>ocs2_ddp</depend>
+    <depend>ocs2_mpc</depend>
+    <depend>ocs2_sqp</depend>
+    <depend>ocs2_ipm</depend>
+    <depend>ocs2_robotic_tools</depend>
+    <depend>ocs2_quadruped</depend>
+    <depend>roscpp</depend>
+    <depend>roslib</depend>
+    <depend>pinocchio</depend>
+    <depend>tf</depend>
+    <depend>urdf</depend>
+    <depend>kdl_parser</depend>
+    <depend>eigen</depend>
+    <depend>robot_state_publisher</depend>
+    <depend>ocs2_ros_interfaces</depend>
+    <depend>sensor_msgs</depend>
+    <depend>gazebo_msgs</depend>
+    <depend>message_generation</depend>
+    <depend>convex_plane_decomposition</depend>
+    <depend>convex_plane_decomposition_msgs</depend>
+    <depend>convex_plane_decomposition_ros</depend>
+    <depend>grid_map_ros</depend>
+    <depend>grid_map_sdf</depend>
+    <depend>elevation_mapping</depend>
+    <depend>point_cloud_io</depend>
+    <build_depend>yaml-cpp</build_depend>
+    <exec_depend>yaml-cpp</exec_depend>
+    <exec_depend>message_runtime</exec_depend>
+    <exec_depend>xacro</exec_depend>
+    <exec_depend>rospy</exec_depend>
+    <exec_depend>tf2_ros</exec_depend>
+    <exec_depend>geometry_msgs</exec_depend>
+
+</package>

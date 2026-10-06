@@ -1,0 +1,1 @@
+float32[12] torque    # torque for all joints（N）

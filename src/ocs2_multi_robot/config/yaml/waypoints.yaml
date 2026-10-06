@@ -1,0 +1,68 @@
+# Waypoint format 1:
+#   x: position in meters (world frame)
+#   y: position in meters (world frame)
+#   yaw: heading in radians (0 = +X direction, counter-clockwise positive)
+# Waypoint format 2:
+#   start_x: starting x position in meters (world frame)
+#   start_y: starting y position in meters (world frame)
+#   start_yaw: starting yaw in radians (world frame)
+#   center_x: circle center x position in meters (world frame)
+#   center_y: circle center y position in meters (world frame)
+#   angle: angle in radians (counter-clockwise positive)
+#   delta_yaw: yaw change relative to start_yaw in radians
+#   (radius is auto-computed from distance between start point and center)
+
+####################################################################
+#####################      Turn Course       #######################
+####################################################################
+turn_course:
+  interpolation: catmull_rom
+  cargo:
+    waypoints:
+      - {x: 1.0, y: 0.0, yaw: 0.0} # turn start point
+      - {start_x: 1.0, start_y: 0.0, start_yaw: 0.0, center_x: 2.5, center_y: 0.0, angle: 1.5708, delta_yaw: -1.5708} # quarter circle
+      - {x: 2.5, y: -1.5, yaw: -1.5708} # turn end point
+
+####################################################################
+##################     Gap Slope Turn Course     ###################
+####################################################################
+gap_slope_turn_course:
+  interpolation: catmull_rom
+  cargo:
+    waypoints:
+      - {x: 0.0, y: 8.0, yaw: 1.5708}
+      - {x: 0.0, y: 10.7, yaw: 1.5708}
+      - {x: 0.0, y: 13.1, yaw: 1.5708} # turn start point
+      - {start_x: 0.0, start_y: 14.1, start_yaw: 1.5708, center_x: 0.0, center_y: 15.6, angle: 1.5708, delta_yaw: -1.5708} # quarter circle
+      - {x: 2.5, y: 15.6, yaw: 0.0} # turn end point
+      - {x: 5.3, y: 15.6, yaw: 0.0}
+      - {x: 5.3, y: 15.6, yaw: 1.5708}
+      
+####################################################################
+##################      Stairs Turn Course      ####################
+####################################################################
+stairs_turn_course:
+  interpolation: catmull_rom
+  cargo:
+    waypoints:
+      - {x: 0.0, y: 2.5, yaw: 1.5708}
+      - {x: 0.0, y: 6.5, yaw: 1.5708} # turn start point
+      - {start_x: 0.0, start_y: 7.5, start_yaw: 1.5708, center_x: 0.0, center_y: 9.0, angle: 1.5708, delta_yaw: -1.5708} # quarter circle
+      - {x: 2.5, y: 9.0, yaw: 0.0} # turn end point
+      - {x: 5.3, y: 9.0, yaw: 0.0}
+      - {x: 5.3, y: 9.0, yaw: 1.5708}
+
+####################################################################
+####################      Circle Course      #######################
+####################################################################
+circle_course:
+  interpolation: catmull_rom
+  cargo:
+    waypoints:
+    - {start_x: 0.0, start_y: 0.0, start_yaw: 0.0, center_x: 0.0, center_y: 1.8, angle: -6.2832, delta_yaw: -6.2832} # full circle
+  robot1:
+    waypoints:
+    - {start_x: -1.5, start_y: 0.0, start_yaw: -0.7, center_x: 0.0, center_y: 1.8, angle: -6.2832, delta_yaw: -6.2832} # full circle
+  robot2:
+    waypoints:
+    - {start_x: 1.5, start_y: 0.0, start_yaw: 3.8416, center_x: 0.0, center_y: 1.8, angle: -6.2832, delta_yaw: -6.2832} # full circle

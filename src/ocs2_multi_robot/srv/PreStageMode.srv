@@ -1,0 +1,4 @@
+int64 mode
+----
+int16 result				#0:success, -1:false
+string message 

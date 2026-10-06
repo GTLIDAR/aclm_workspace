@@ -1,0 +1,119 @@
+<launch>
+  <!-- Four Robot Perceptive Terrain Mode Launch File for ADMM with Foldable Stretcher -->
+  
+  <arg name="rviz"               default="true" />
+  <arg name="publish_robot_description" default="true" />
+  <arg name="use_perceptive"     default="true" />
+  <arg name="enable_obstacle_avoidance" default="false" />
+  <arg name="world_name"         default="gap_slope_course" />
+  
+  <arg name="urdfFile"           default="$(find ocs2_multi_robot)/assets/robot/b1z1_description/urdf/b1z1.urdf"/>
+  <arg name="armUrdfFile"        default="$(find ocs2_multi_robot)/assets/robot/z1_description/urdf/z1.urdf"/>
+  <arg name="cargoUrdfFile"      default="$(find ocs2_multi_robot)/assets/robot/b1z1_description/urdf/foldable_stretcher.urdf"/>
+  <arg name="gaitCommandFile"    default="$(find ocs2_multi_robot)/config/info/gait.info"/>
+  <arg name="taskFile"           default="$(find ocs2_multi_robot)/config/info/four_quadruped_w_stretcher_perceptive_admm.info"/>
+  
+  <arg name="b1z1_1_ns" value="b1z1_1"/>
+  <arg name="b1z1_2_ns" value="b1z1_2"/>
+  <arg name="b1z1_3_ns" value="b1z1_3"/>
+  <arg name="b1z1_4_ns" value="b1z1_4"/>
+  <param name="robot1_ns" value="$(arg b1z1_1_ns)"/>
+  <param name="robot2_ns" value="$(arg b1z1_2_ns)"/>
+  <param name="robot3_ns" value="$(arg b1z1_3_ns)"/>
+  <param name="robot4_ns" value="$(arg b1z1_4_ns)"/>
+  <param name="taskFile"   value="$(arg taskFile)"/>
+  <param name="gaitCommandFile"   value="$(arg gaitCommandFile)"/>
+  <param name="armUrdfFile"   value="$(arg armUrdfFile)"/>
+  <param name="cargoUrdfFile"   value="$(arg cargoUrdfFile)"/>
+  <param name="use_perceptive" value="$(arg use_perceptive)"/>
+  <param name="enable_obstacle_avoidance" value="$(arg enable_obstacle_avoidance)"/>
+  <param name="num_robots" value="4"/>
+
+  <!-- TF transforms for elevation mapping -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_odom"
+      args="0 0 0 0 0 0 world odom" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="odom_to_cargo"
+        args="0 0 1.4 0 0 0 odom cargo" />
+  <node pkg="ocs2_multi_robot" type="view_frame_publisher.py" name="view_frame_publisher"
+        output="screen">
+    <param name="source_frame" value="cargo" />
+    <param name="parent_frame" value="odom" />
+    <param name="child_frame"  value="view" />
+    <param name="fixed_yaw"    value="0.0" />
+  </node>
+
+  <!-- Perception Pipeline (when use_perceptive is true) -->
+  <group if="$(arg use_perceptive)">
+    <include file="$(find ocs2_multi_robot)/launch/elevation_mapping_fixed.launch">
+      <arg name="world_name" value="$(arg world_name)" />
+      <arg name="map_frame" value="odom" />
+      <arg name="base_frame" value="cargo" />
+      <arg name="target_frame" value="odom" />
+      <arg name="elevation_config" value="$(find ocs2_multi_robot)/config/yaml/elevation_mapping_fixed.yaml" />
+    </include>
+  </group>
+
+  <!-- rviz -->
+  <group if="$(arg rviz)">
+    <arg name="rvizconfig" default="$(find ocs2_multi_robot)/rviz/view_four_b1z1_stretcher.rviz" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rvizconfig)" output="screen" />
+  </group>
+
+  <!-- Robot State Publishers -->
+  <group ns="/$(arg b1z1_1_ns)">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdfFile)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+                respawn="false" output="screen">
+      <param name="tf_prefix" value="$(arg b1z1_1_ns)" />
+    </node>
+  </group>
+
+  <group ns="/$(arg b1z1_2_ns)">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdfFile)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+                respawn="false" output="screen">
+      <param name="tf_prefix" value="$(arg b1z1_2_ns)" />
+    </node>
+  </group>
+
+  <group ns="/$(arg b1z1_3_ns)">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdfFile)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+                respawn="false" output="screen">
+      <param name="tf_prefix" value="$(arg b1z1_3_ns)" />
+    </node>
+  </group>
+
+  <group ns="/$(arg b1z1_4_ns)">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg urdfFile)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+                respawn="false" output="screen">
+      <param name="tf_prefix" value="$(arg b1z1_4_ns)" />
+    </node>
+  </group>
+
+  <!-- Stretcher State Publisher -->
+  <group ns="cargo">
+    <param name="robot_description" textfile="$(arg cargoUrdfFile)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+          respawn="false" output="screen" >
+      <param name="tf_prefix" value="cargo" />
+    </node>
+  </group>
+
+  <!-- ADMM MPC Node -->
+  <node pkg="ocs2_multi_robot" type="MultiRobotDummyConsensusMpcNode" name="MultiRobotDummyConsensusMpcNode"
+        output="screen"/>
+
+  <node pkg="ocs2_multi_robot" type="MultiRobotDummyNode" name="MultiRobotDummyNode"
+        output="screen"/>
+
+  <!-- Target Trajectories Publisher -->
+  <node pkg="ocs2_multi_robot" type="MultiRobotGeneralizedTargetTrajectoriesPublisher" name="trajectories_publisher" 
+        output="screen"/>
+
+  <!-- Gait Command -->
+  <node pkg="ocs2_multi_robot" type="GaitCommandNode" name="CentralGaitCommand" 
+        output="screen" launch-prefix="gnome-terminal --title='CentralGaitCommand' --"/>
+
+</launch>

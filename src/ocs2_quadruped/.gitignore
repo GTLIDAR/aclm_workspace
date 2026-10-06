@@ -1,0 +1,5 @@
+/cmake-build-debug/
+/.idea/
+/cmake-build-debug-docker/
+/cmake-build-debug-debug/
+/.vscode/
